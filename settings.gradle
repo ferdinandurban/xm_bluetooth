@@ -1,0 +1,9 @@
+/*
+ *
+ * @author Ferdinand Urban
+ * Copyright (C) 2016  Ferdinand Urban
+ *
+ *
+ */
+
+include ':app', ':communication'
