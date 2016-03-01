@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final ProgressDialog dialog = ProgressDialog.show(getApplicationContext(), "", "loading...");
+                final ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "", "loading...", true);
 
                 RestClient.XMRestApiInterface service = RestClient.getClient();
 
@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     public void onFailure(Call<RestResults> call, Throwable t) {
+                        showToast(t.getMessage());
                         dialog.dismiss();
                     }
 

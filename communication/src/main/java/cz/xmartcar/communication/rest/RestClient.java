@@ -40,19 +40,19 @@ public class RestClient {
     private static XMRestApiInterface xmRestApiInterface;
 
     //TODO change to real URL
-    private static String baseUrl = "https://api.xmarton.cz" ;
+    private static String baseUrl = "https://api.github.com" ;
 
     public static XMRestApiInterface getClient() {
         if (xmRestApiInterface == null) {
 
-            OkHttpClient okClient = new OkHttpClient();
-            okClient.interceptors().add(new Interceptor() {
+            OkHttpClient okClient = new OkHttpClient.Builder().addInterceptor(
+                new Interceptor() {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
                     Response response = chain.proceed(chain.request());
                     return response;
                 }
-            });
+            }).build();
 
             Retrofit client = new Retrofit.Builder()
                     .baseUrl(baseUrl)

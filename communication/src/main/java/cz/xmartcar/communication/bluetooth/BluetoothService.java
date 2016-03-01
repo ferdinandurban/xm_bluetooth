@@ -30,7 +30,7 @@ public class BluetoothService {
     private static final String NAME_SECURE = "Bluetooth Secure";
     
     // Unique UUID for this application
-    private static final UUID UUID_ANDROID_DEVICE = UUID.fromString("8f3a0d60-dacf-11e5-b871-0002a5d5c51b");
+    private static final UUID UUID_ANDROID_DEVICE = UUID.fromString("6E6B5C64-FAF7-40AE-9C21-D4933AF45B23");
     private static final UUID UUID_OTHER_DEVICE = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     
     // Member fields
