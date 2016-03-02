@@ -59,7 +59,7 @@ public class BluetoothService {
         mState = state;
         
         // Give the new state to the Handler so the UI Activity can update
-        mHandler.obtainMessage(BluetoothMessageStatus.MESSAGE_STATE_CHANGE, state.getValue(), -1).sendToTarget();
+        mHandler.obtainMessage(BluetoothMessageStates.MESSAGE_STATE_CHANGE, state.getValue(), -1).sendToTarget();
     }
 
     // Return the current connection state. 
@@ -127,7 +127,7 @@ public class BluetoothService {
         mConnectedThread.start();
 
         // Send the name of the connected device back to the UI Activity
-        Message msg = mHandler.obtainMessage(BluetoothMessageStatus.MESSAGE_DEVICE_NAME);
+        Message msg = mHandler.obtainMessage(BluetoothMessageStates.MESSAGE_DEVICE_NAME);
         Bundle bundle = new Bundle();
         bundle.putString("android_device", device.getName());
         bundle.putString("android_device_address", device.getAddress());
@@ -351,7 +351,7 @@ public class BluetoothService {
                         }
 
                         // Send the obtained bytes to the UI Activity
-                        mHandler.obtainMessage(BluetoothMessageStatus.MESSAGE_READ, buffer.length, -1, buffer).sendToTarget();
+                        mHandler.obtainMessage(BluetoothMessageStates.MESSAGE_READ, buffer.length, -1, buffer).sendToTarget();
                         arr_byte = new ArrayList<Integer>();
                     } else {
                         arr_byte.add(data);
@@ -376,7 +376,7 @@ public class BluetoothService {
                 buffer2[buffer2.length - 1] = 0x0D;*/
                 mmOutStream.write(buffer);
                 // Share the sent message back to the UI Activity
-                mHandler.obtainMessage(BluetoothMessageStatus.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
+                mHandler.obtainMessage(BluetoothMessageStates.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
             } catch (IOException e) { }
         }
 

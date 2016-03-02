@@ -17,7 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import cz.xmartcar.communication.bluetooth.BluetoothOther;
+import cz.xmartcar.communication.bluetooth.BluetoothMessageStates;
 import cz.xmartcar.communication.bluetooth.BluetoothProtocol;
 import cz.xmartcar.communication.bluetooth.BluetoothStatus;
 import cz.xmartcar.communication.bluetooth.DeviceList;
@@ -69,7 +69,7 @@ public class DeviceListActivity extends AppCompatActivity {
                     mBTProtocol.disconnect();
                 } else {
                     Intent intent = new Intent(getApplicationContext(), DeviceList.class);
-                    startActivityForResult(intent, BluetoothOther.REQUEST_CONNECT_DEVICE);
+                    startActivityForResult(intent, BluetoothMessageStates.REQUEST_CONNECT_DEVICE);
                 }
             }
         });
@@ -84,11 +84,11 @@ public class DeviceListActivity extends AppCompatActivity {
         super.onStart();
         if (!mBTProtocol.isBluetoothEnabled()) {
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(intent, BluetoothOther.REQUEST_ENABLE_BT);
+            startActivityForResult(intent, BluetoothMessageStates.REQUEST_ENABLE_BT);
         } else {
             if(!mBTProtocol.isServiceAvailable()) {
                 mBTProtocol.setupService();
-                mBTProtocol.startService(BluetoothOther.DEVICE_ANDROID);
+                mBTProtocol.startService(BluetoothMessageStates.DEVICE_ANDROID);
                 setup();
             }
         }
@@ -104,13 +104,13 @@ public class DeviceListActivity extends AppCompatActivity {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == BluetoothOther.REQUEST_CONNECT_DEVICE) {
+        if(requestCode == BluetoothMessageStates.REQUEST_CONNECT_DEVICE) {
             if(resultCode == Activity.RESULT_OK)
                 mBTProtocol.connect(data);
-        } else if(requestCode == BluetoothOther.REQUEST_ENABLE_BT) {
+        } else if(requestCode == BluetoothMessageStates.REQUEST_ENABLE_BT) {
             if(resultCode == Activity.RESULT_OK) {
                 mBTProtocol.setupService();
-                mBTProtocol.startService(BluetoothOther.DEVICE_ANDROID);
+                mBTProtocol.startService(BluetoothMessageStates.DEVICE_ANDROID);
                 setup();
             } else {
                 Toast.makeText(getApplicationContext()

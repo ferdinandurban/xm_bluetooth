@@ -218,9 +218,9 @@ public class BluetoothProtocol {
     private final Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
-            case BluetoothMessageStatus.MESSAGE_WRITE:
+            case BluetoothMessageStates.MESSAGE_WRITE:
                 break;
-            case BluetoothMessageStatus.MESSAGE_READ:
+            case BluetoothMessageStates.MESSAGE_READ:
                 byte[] readBuf = (byte[]) msg.obj;
                 String readMessage = new String(readBuf);
                 if(readBuf != null && readBuf.length > 0) {
@@ -228,18 +228,18 @@ public class BluetoothProtocol {
                         mDataReceivedListener.onDataReceived(readBuf, readMessage);
                 }
                 break;
-            case BluetoothMessageStatus.MESSAGE_DEVICE_NAME:
-                mDeviceName = msg.getData().getString(BluetoothOther.DEVICE_NAME);
-                mDeviceAddress = msg.getData().getString(BluetoothOther.DEVICE_ADDRESS);
+            case BluetoothMessageStates.MESSAGE_DEVICE_NAME:
+                mDeviceName = msg.getData().getString(BluetoothMessageStates.DEVICE_NAME);
+                mDeviceAddress = msg.getData().getString(BluetoothMessageStates.DEVICE_ADDRESS);
                 if(mBluetoothConnectionListener != null)
                     mBluetoothConnectionListener.onDeviceConnected(mDeviceName, mDeviceAddress);
                 isConnected = true;
                 break;
-            case BluetoothMessageStatus.MESSAGE_TOAST:
-                Toast.makeText(mContext, msg.getData().getString(BluetoothOther.TOAST)
+            case BluetoothMessageStates.MESSAGE_TOAST:
+                Toast.makeText(mContext, msg.getData().getString(BluetoothMessageStates.TOAST)
                         , Toast.LENGTH_SHORT).show();
                 break;
-            case BluetoothMessageStatus.MESSAGE_STATE_CHANGE:
+            case BluetoothMessageStates.MESSAGE_STATE_CHANGE:
                 if(mBluetoothStateListener != null)
                     mBluetoothStateListener.onServiceStateChanged(msg.arg1);
                 if(isConnected && msg.arg1 != BluetoothStatus.STATE_CONNECTED.getValue()) {
@@ -273,7 +273,7 @@ public class BluetoothProtocol {
     }
     
     public void connect(Intent data) {
-        String address = data.getExtras().getString(BluetoothOther.EXTRA_DEVICE_ADDRESS);
+        String address = data.getExtras().getString(BluetoothMessageStates.EXTRA_DEVICE_ADDRESS);
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
         mChatService.connect(device);
     }
