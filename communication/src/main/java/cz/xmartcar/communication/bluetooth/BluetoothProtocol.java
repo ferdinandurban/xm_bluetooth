@@ -11,6 +11,11 @@ package cz.xmartcar.communication.bluetooth;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanFilter;
+import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -19,9 +24,12 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class BluetoothProtocol {
+    private static final String TAG = "BluetoothProtocol";
+
     // Listener for Bluetooth Status & Connection
     private BluetoothStateListener      mBluetoothStateListener = null;
     private OnDataReceivedListener      mDataReceivedListener = null;
@@ -33,6 +41,9 @@ public class BluetoothProtocol {
     
     // Local Bluetooth adapter
     private BluetoothAdapter mBluetoothAdapter = null;
+
+    // Local Bluetooth LE Scanner
+    private BluetoothLeScanner mBluetoothLeScanner = null;
 
     // Member object for the chat services
     private BluetoothService mChatService = null;
@@ -56,6 +67,8 @@ public class BluetoothProtocol {
     public BluetoothProtocol(Context context) {
         mContext = context;
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
+
     }
     
     public interface BluetoothStateListener {
@@ -102,7 +115,51 @@ public class BluetoothProtocol {
     public boolean startDiscovery() {
         return mBluetoothAdapter.startDiscovery();
     }
-    
+
+    public void startLeScan(){
+        ScanFilter serviceFilter = new ScanFilter.Builder()
+                .setServiceUuid(XmartcarService.XMARTCAR_SERVICE)
+                .build();
+        ArrayList<ScanFilter> filters = new ArrayList<>();
+        filters.add(serviceFilter);
+        ScanSettings settings = new ScanSettings.Builder()
+                .setScanMode(ScanSettings.SCAN_MODE_BALANCED)
+                .build();
+
+        mBluetoothLeScanner.startScan(filters, settings, mLEScanCallback);
+    }
+
+
+    private ScanCallback mLEScanCallback = new ScanCallback() {
+        @Override
+        public void onScanResult(int callbackType, ScanResult result) {
+            Log.d(TAG, "onScanResult");
+            processResult(result);
+        }
+
+        @Override
+        public void onBatchScanResults(List<ScanResult> results) {
+            Log.d(TAG, "onBatchScanResults: "+results.size()+" results");
+            for (ScanResult result : results) {
+                processResult(result);
+            }
+        }
+
+        @Override
+        public void onScanFailed(int errorCode) {
+            Log.w(TAG, "LE Scan Failed: "+errorCode);
+        }
+
+        private void processResult(ScanResult result) {
+            Log.i(TAG, "New LE Device: " + result.getDevice().getName() + " @ " + result.getRssi());
+
+//            XmartcarService carService = new XmartcarService(result.getScanRecord(),
+//                    result.getDevice().getAddress(),
+//                    result.getRssi());
+//
+        }
+    };
+
     public boolean isDiscovery() {
         return mBluetoothAdapter.isDiscovering();
     }
