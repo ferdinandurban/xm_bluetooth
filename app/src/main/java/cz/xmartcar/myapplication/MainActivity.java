@@ -68,7 +68,11 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), DeviceListActivity.class);
+//                Intent intent = new Intent(getApplicationContext(), DeviceListActivity.class);
+//                startActivity(intent);
+
+                // testing
+                Intent intent = new Intent(getApplicationContext(), BluetoothActivity.class);
                 startActivity(intent);
             }
         });

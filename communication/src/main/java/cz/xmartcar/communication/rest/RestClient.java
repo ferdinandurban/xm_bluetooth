@@ -1,16 +1,5 @@
-/*
- *
- * @author Ferdinand Urban
- * Copyright (C) 2016  Ferdinand Urban
- *
- *
- */
 
 package cz.xmartcar.communication.rest;
-
-/**
- * Created by ferdinandurban on 24/02/16.
- */
 
 import java.io.IOException;
 
@@ -30,11 +19,7 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-/**
- * Created by Ashiq Uz Zoha on 9/13/15.
- * Dhrubok Infotech Services Ltd.
- * ashiq.ayon@gmail.com
- */
+
 public class RestClient {
 
     private static XMRestApiInterface xmRestApiInterface;
