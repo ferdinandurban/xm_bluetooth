@@ -46,7 +46,7 @@ public class BluetoothProtocol {
     private BluetoothLeScanner mBluetoothLeScanner = null;
 
     // Member object for the chat services
-    private BluetoothService mChatService = null;
+    private BluetoothService mBtService = null;
     
     // Name and Address of the connected device
     private String mDeviceName = null;
@@ -105,7 +105,7 @@ public class BluetoothProtocol {
     }
     
     public boolean isServiceAvailable() {
-        return mChatService != null;
+        return mBtService != null;
     }
     
     public boolean isAutoConnecting() {
@@ -169,7 +169,7 @@ public class BluetoothProtocol {
     }
     
     public void setupService() {
-        mChatService = new BluetoothService(mContext, mHandler);
+        mBtService = new BluetoothService(mContext, mHandler);
     }
     
     public BluetoothAdapter getBluetoothAdapter() {
@@ -177,32 +177,32 @@ public class BluetoothProtocol {
     }
     
     public BluetoothStatus getServiceState() {
-        if(mChatService != null) 
-            return mChatService.getState();
+        if(mBtService != null)
+            return mBtService.getState();
         else 
             return BluetoothStatus.STATE_NULL;
     }
     
     public void startService(boolean isAndroid) {
-        if (mChatService != null) {
-            if (mChatService.getState() == BluetoothStatus.STATE_NONE) {
+        if (mBtService != null) {
+            if (mBtService.getState() == BluetoothStatus.STATE_NONE) {
                 isServiceRunning = true;
-                mChatService.start(isAndroid);
+                mBtService.start(isAndroid);
                 BluetoothProtocol.this.isAndroid = isAndroid;
             }
         }
     }
     
     public void stopService() {
-        if (mChatService != null) {
+        if (mBtService != null) {
             isServiceRunning = false;
-            mChatService.stop();
+            mBtService.stop();
         }
         new Handler().postDelayed(new Runnable() {
             public void run() {
-                if (mChatService != null) {
+                if (mBtService != null) {
                     isServiceRunning = false;
-                    mChatService.stop();
+                    mBtService.stop();
                 }
             }
         }, 500);
@@ -275,21 +275,21 @@ public class BluetoothProtocol {
     public void connect(Intent data) {
         String address = data.getExtras().getString(BluetoothMessageStates.EXTRA_DEVICE_ADDRESS);
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
-        mChatService.connect(device);
+        mBtService.connect(device);
     }
     
     public void connect(String address) {
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
-        mChatService.connect(device);
+        mBtService.connect(device);
     }
     
     public void disconnect() {
-        if(mChatService != null) {
+        if(mBtService != null) {
             isServiceRunning = false;
-            mChatService.stop();
-            if(mChatService.getState() == BluetoothStatus.STATE_NONE) {
+            mBtService.stop();
+            if(mBtService.getState() == BluetoothStatus.STATE_NONE) {
                 isServiceRunning = true;
-                mChatService.start(BluetoothProtocol.this.isAndroid);
+                mBtService.start(BluetoothProtocol.this.isAndroid);
             }
         }
     }
@@ -315,25 +315,25 @@ public class BluetoothProtocol {
     }
     
     public void send(byte[] data, boolean CRLF) {
-        if(mChatService.getState() == BluetoothStatus.STATE_CONNECTED) {
+        if(mBtService.getState() == BluetoothStatus.STATE_CONNECTED) {
             if(CRLF) {
                 byte[] data2 = new byte[data.length + 2];
                 for(int i = 0 ; i < data.length ; i++) 
                     data2[i] = data[i];
                 data2[data2.length - 2] = 0x0A;
                 data2[data2.length - 1] = 0x0D;
-                mChatService.write(data2);
+                mBtService.write(data2);
             } else {
-                mChatService.write(data);
+                mBtService.write(data);
             }
         }
     }
     
     public void send(String data, boolean CRLF) {
-        if(mChatService.getState() == BluetoothStatus.STATE_CONNECTED) {
+        if(mBtService.getState() == BluetoothStatus.STATE_CONNECTED) {
             if(CRLF) 
                 data += "\r\n"; 
-            mChatService.write(data.getBytes());
+            mBtService.write(data.getBytes());
         }
     }
     

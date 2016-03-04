@@ -183,9 +183,6 @@ public class BluetoothService {
         BluetoothService.this.start(BluetoothService.this.isAndroid);
     }
 
-    // This thread runs while listening for incoming connections. It behaves
-    // like a server-side client. It runs until a connection is accepted
-    // (or until cancelled)
     private class AcceptThread extends Thread {
         // The local server socket
         private BluetoothServerSocket mmServerSocket;

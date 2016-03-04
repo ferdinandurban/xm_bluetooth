@@ -52,13 +52,11 @@ public class DeviceListActivity extends AppCompatActivity {
             }
 
             public void onDeviceDisconnected() {
-                Toast.makeText(getApplicationContext()
-                        , "Connection lost", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Connection lost", Toast.LENGTH_SHORT).show();
             }
 
             public void onDeviceConnectionFailed() {
-                Toast.makeText(getApplicationContext()
-                        , "Unable to connect", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Unable to connect", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -113,9 +111,7 @@ public class DeviceListActivity extends AppCompatActivity {
                 mBTProtocol.startService(BluetoothMessageStates.DEVICE_ANDROID);
                 setup();
             } else {
-                Toast.makeText(getApplicationContext()
-                        , "Bluetooth was not enabled."
-                        , Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Bluetooth was not enabled.", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }

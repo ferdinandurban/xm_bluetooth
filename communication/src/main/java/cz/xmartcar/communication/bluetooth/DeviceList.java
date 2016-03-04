@@ -142,9 +142,6 @@ public class DeviceList extends Activity {
         setProgressBarIndeterminateVisibility(true);
         setTitle(strScanning);
 
-        // Turn on sub-title for new devices
-        // findViewById(R.id.title_new_devices).setVisibility(View.VISIBLE);
-        // If we're already discovering, stop it
         if (mBtAdapter.isDiscovering()) {
             mBtAdapter.cancelDiscovery();
         }
