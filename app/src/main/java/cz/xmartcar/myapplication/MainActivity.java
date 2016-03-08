@@ -23,8 +23,12 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import cz.xmartcar.communication.Model.RestResults;
+import cz.xmartcar.communication.Model.SSOResults;
 import cz.xmartcar.communication.bluetooth.BluetoothProtocol;
 import cz.xmartcar.communication.rest.RestClient;
+import cz.xmartcar.communication.rest.XMRestApiInterface;
+import cz.xmartcar.communication.rest.sso.SSO;
+import cz.xmartcar.communication.rest.sso.XMSSOInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -85,30 +89,56 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "", "loading...", true);
 
-                RestClient.XMRestApiInterface service = RestClient.getClient();
+                String baseUrl = "https://api.github.com" ;
+                XMRestApiInterface service = RestClient.getClient(baseUrl);
 
-                Call<RestResults> call = service.getUsersNamedTom("tom");
+                Call<RestResults> call = service.getUsersNamed("tom");
 
-                call.enqueue(new Callback<RestResults>() {
+//                call.enqueue(new Callback<RestResults>() {
+//                    @Override
+//                    public void onResponse(Call<RestResults> call, Response<RestResults> response) {
+//                        dialog.dismiss();
+//                        Log.d("MainActivity", "Status Code = " + response.code());
+//                        if (response.isSuccess()) {
+//                            // request successful (status code 200, 201)
+//                            RestResults result = response.body();
+//                            Log.d("MainActivity", "response = " + new Gson().toJson(result));
+//                        } else {
+//                            // response received but request not successful (like 400,401,403 etc)
+//                            //Handle errors
+//                        }
+//                    }
+//
+//                    public void onFailure(Call<RestResults> call, Throwable t) {
+//                        showToast(t.getMessage());
+//                        dialog.dismiss();
+//                    }
+//
+//                });
+
+
+                // SSO Test
+                XMSSOInterface xmssoInterface = SSO.getSSOService();
+                Call<SSOResults> ssoResultsCall = xmssoInterface.getToken("grant_type=password&username=tester&password=tester123&scope=roles");
+
+                ssoResultsCall.enqueue(new Callback<SSOResults>() {
                     @Override
-                    public void onResponse(Call<RestResults> call, Response<RestResults> response) {
+                    public void onResponse(Call<SSOResults> call, Response<SSOResults> response) {
                         dialog.dismiss();
-                        Log.d("MainActivity", "Status Code = " + response.code());
-                        if (response.isSuccess()) {
-                            // request successful (status code 200, 201)
-                            RestResults result = response.body();
-                            Log.d("MainActivity", "response = " + new Gson().toJson(result));
+
+                        if(response.isSuccess()){
+                            SSOResults ssoResults = response.body();
+                            Log.d("MainActivity", "response = " + new Gson().toJson(ssoResults));
                         } else {
-                            // response received but request not successful (like 400,401,403 etc)
-                            //Handle errors
+
                         }
                     }
 
-                    public void onFailure(Call<RestResults> call, Throwable t) {
+                    @Override
+                    public void onFailure(Call<SSOResults> call, Throwable t) {
                         showToast(t.getMessage());
                         dialog.dismiss();
                     }
-
                 });
             }
         });
@@ -137,6 +167,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showToast(String message) {
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 }

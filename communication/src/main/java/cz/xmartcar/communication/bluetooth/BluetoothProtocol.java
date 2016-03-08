@@ -67,7 +67,7 @@ public class BluetoothProtocol {
     public BluetoothProtocol(Context context) {
         mContext = context;
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
+//        mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
 
     }
     
