@@ -8,15 +8,14 @@
 
 package cz.xmartcar.communication.rest.sso;
 
-import org.apache.http.conn.ssl.X509HostnameVerifier;
-
 import java.io.IOException;
-import java.security.cert.X509Certificate;
 
 import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import cz.xmartcar.communication.rest.RestClient;
 import okhttp3.Interceptor;
@@ -29,56 +28,56 @@ public class SSO extends RestClient {
 
     private static String mSSOUrlPath = "https://vcartestid1/xMartOnSSO/connect/";
     // exception for SSO server -- self-signed certificate
-    private static String mHostname = "10.0.20.161";
+    private static String mHostname = "vcartestid1";
     private static XMSSOInterface xmssoInterface;
     OkHttpClient okHttpClient = new OkHttpClient();
 
-    HostnameVerifier hostNameVerifier = new X509HostnameVerifier() {
-        @Override
-        public boolean verify(String hostname, SSLSession session) {
-            try {
-                verifyHost(hostname);
-                return true;
-            } catch (SSLException e) {
-                e.printStackTrace();
-                return false;
-            }
+    private static OkHttpClient getUnsafeOkHttpClient() {
+        try {
+            // Create a trust manager that does not validate certificate chains
+            final TrustManager[] trustAllCerts = new TrustManager[] {
+                    new X509TrustManager() {
+                        @Override
+                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) {
+                        }
+
+                        @Override
+                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) {
+                        }
+
+                        @Override
+                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                            return new java.security.cert.X509Certificate[]{};
+                        }
+                    }
+            };
+
+            // Install the all-trusting trust manager
+            final SSLContext sslContext = SSLContext.getInstance("SSL");
+            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+            // Create an ssl socket factory with our all-trusting manager
+            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            builder.sslSocketFactory(sslSocketFactory);
+            builder.hostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
+
+            OkHttpClient okHttpClient = builder.build();
+            return okHttpClient;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-
-        @Override
-        public void verify(String host, String[] cns, String[] subjectAlts) throws SSLException {
-            verifyHost(host);
-        }
-
-        @Override
-        public void verify(String host, X509Certificate cert) throws SSLException {
-            verifyHost(host);
-        }
-
-        @Override
-        public void verify(String host, SSLSocket ssl) throws IOException {
-            verifyHost(host);
-        }
-
-        private void verifyHost(String sourceHost) throws SSLException {
-            if (!mHostname.equals(sourceHost)) {
-                throw new SSLException("Hostname '10.0.20.161' was not verified");
-            }
-        }
-    };
-
-
-//    okHttpClient.setHostnameVerifier(hostNameVerifier);
-//    OkClient okClient = new OkClient(okHttpClient);
-
-//    RestAdapter restAdapter = new RestAdapter.Builder()
-//            **.setClient(okClient)** //this is where u bind the httpClient
-//            .build(); //make sure you specify endpoint, headerInterceptor etc ...
-
+    }
+    
     public static XMSSOInterface getSSOService() {
         if (xmssoInterface == null) {
 
-            OkHttpClient okClient = new OkHttpClient.Builder().addInterceptor(
+            OkHttpClient okClient = getUnsafeOkHttpClient().newBuilder().addInterceptor(
                     new Interceptor() {
                         @Override
                         public Response intercept(Chain chain) throws IOException {
