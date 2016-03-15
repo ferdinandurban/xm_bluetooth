@@ -1,8 +1,8 @@
 
 package cz.xmartcar.communication.rest;
 
-import cz.xmartcar.communication.Model.RestResults;
-import cz.xmartcar.communication.Model.XMData;
+import cz.xmartcar.communication.model.RestResults;
+import cz.xmartcar.communication.model.XMData;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;

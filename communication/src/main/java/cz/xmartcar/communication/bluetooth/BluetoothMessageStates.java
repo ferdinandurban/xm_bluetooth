@@ -8,7 +8,7 @@
 
 package cz.xmartcar.communication.bluetooth;
 
-// Message types sent from the BluetoothChatService Handler
+// Message types sent from the BluetoothService2 Handler
 public class BluetoothMessageStates {
     public static final int MESSAGE_STATE_CHANGE = 1;
     public static final int MESSAGE_READ = 2;

@@ -6,14 +6,11 @@
  *
  */
 
-package cz.xmartcar.communication.Model;
+package cz.xmartcar.communication.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by ferdinandurban on 24/02/16.
- */
 public class RestResults {
 
     private int totalCount;

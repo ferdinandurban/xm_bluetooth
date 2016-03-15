@@ -3,6 +3,7 @@ package cz.xmartcar.communication.rest;
 
 import java.io.IOException;
 
+import cz.xmartcar.communication.base.XMConstants;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
@@ -15,7 +16,7 @@ public class RestClient {
     private static XMRestApiInterface xmRestApiInterface;
 
     // TODO change to real URL
-    private static String baseUrl = "https://api.github.com" ;
+    private static String baseUrl = XMConstants.REST_SANDBOX_ENDPOINT;
 
     public static XMRestApiInterface getClient(String url) {
         if (xmRestApiInterface == null) {

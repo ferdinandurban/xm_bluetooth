@@ -1,7 +1,7 @@
 
 package cz.xmartcar.communication.rest.sso;
 
-import cz.xmartcar.communication.Model.SSOResults;
+import cz.xmartcar.communication.model.SSOResults;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;

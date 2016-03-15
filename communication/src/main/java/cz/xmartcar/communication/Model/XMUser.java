@@ -6,7 +6,11 @@
  *
  */
 
-package cz.xmartcar.communication.Model;
+package cz.xmartcar.communication.model;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 public class XMUser {
     private String mName;
@@ -15,44 +19,51 @@ public class XMUser {
     private String mTokenType;
     private Integer mExpiresIn;
 
-    public String getmName() {
+    public String getName() {
         return mName;
     }
 
-    public void setmName(String mName) {
-        this.mName = mName;
+    public void setName(String name) {
+        mName = name;
     }
 
-    public String getmPassword() {
+    public String getPassword() {
         return mPassword;
     }
 
-    public void setmPassword(String mPassword) {
-        this.mPassword = mPassword;
+    public void setPassword(String password) {
+        mPassword = password;
     }
 
-    public String getmToken() {
+    public String getToken() {
         return mToken;
     }
 
-    public void setmToken(String mToken) {
-        this.mToken = mToken;
+    public void setToken(String token) {
+        mToken = token;
     }
 
-    public String getmTokenType() {
+    public String getTokenType() {
         return mTokenType;
     }
 
-    public void setmTokenType(String mTokenType) {
-        this.mTokenType = mTokenType;
+    public void setmTokenType(String tokenType) {
+        mTokenType = tokenType;
     }
 
-    public Integer getmExpiresIn() {
+    public Integer getExpiresIn() {
         return mExpiresIn;
     }
 
-    public void setmExpiresIn(Integer mExpiresIn) {
-        this.mExpiresIn = mExpiresIn;
+    public void setExpiresIn(Integer expiresIn) {
+        mExpiresIn = expiresIn;
     }
 
+    public Map<String,XMCar> getCars() throws IOException {
+        return null;
+    }
+
+    public List<XMEventInfo> listEvents() throws IOException {
+        return null;
+    }
 }

@@ -17,6 +17,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import cz.xmartcar.communication.base.XMConstants;
 import cz.xmartcar.communication.rest.RestClient;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -26,7 +27,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SSO extends RestClient {
 
-    private static String mSSOUrlPath = "https://vcartestid1/xMartOnSSO/connect/";
+    private static String mSSOUrlPath = XMConstants.PLATFORM_SSO_ENDPOINT;
+
     // exception for SSO server -- self-signed certificate
     private static String mHostname = "vcartestid1";
     private static XMSSOInterface xmssoInterface;

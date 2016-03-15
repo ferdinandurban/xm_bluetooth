@@ -6,7 +6,7 @@
  *
  */
 
-package cz.xmartcar.communication.Model;
+package cz.xmartcar.communication.model;
 
 /**
  * Created by ferdinandurban on 24/02/16.
