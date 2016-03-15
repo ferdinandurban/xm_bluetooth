@@ -19,6 +19,14 @@ public class XMUser {
     private String mTokenType;
     private Integer mExpiresIn;
 
+    public XMUser(){
+        mToken = "1234-5678-90ab";
+        mTokenType = "bearer";
+        mExpiresIn = 1234567890;
+        mName = "jan_novak";
+        mPassword = "hlupy_honza";
+    }
+
     public String getName() {
         return mName;
     }

@@ -60,8 +60,8 @@ public final class XMConstants {
     // IPN endpoint property name
     public static final String IPN_ENDPOINT = "service.IPNEndpoint";
 
-    // Platform SSO Endpoint
-    public static final String PLATFORM_SSO_ENDPOINT = "https://vcartestid1/xMartOnSSO/connect";
+    // Platform SSOService Endpoint
+    public static final String PLATFORM_SSO_ENDPOINT = "https://vcartestid1/xMartOnSSO/connect/";
 
     // REST Sandbox Endpoint
     public static final String REST_SANDBOX_ENDPOINT = "https://api.sandbox.xmarton.com/";

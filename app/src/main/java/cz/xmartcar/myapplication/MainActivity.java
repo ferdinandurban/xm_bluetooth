@@ -14,16 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-import android.widget.ViewAnimator;
 
-import cz.xmartcar.communication.bluetooth.BluetoothProtocol;
-import cz.xmartcar.communication.rest.RestClient;
+import cz.xmartcar.communication.Communication;
 import rx.Subscriber;
 
 public class MainActivity extends AppCompatActivity {
-
-    private BluetoothProtocol   mBTProtocol;
-    private RestClient          mRestService;
 
     private Subscriber<String> mXMCSubscriber = new Subscriber<String>() {
         @Override
@@ -45,8 +40,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mBTProtocol = new BluetoothProtocol(this);
 
         setContentView(R.layout.activity_main);
 
@@ -79,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
 //            public void onClick(View view) {
 //                final ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "", "loading...", true);
 //
-//                // SSO Test
-//                XMSSOInterface xmssoInterface = SSO.getSSOService();
+//                // SSOService Test
+//                XMSsoApi xmssoInterface = SSOService.getSSOService();
 //                Call<SSOResults> ssoResultsCall = xmssoInterface.getToken("grant_type=password&username=tester&password=tester123&scope=roles");
 //
 //                ssoResultsCall.enqueue(new Callback<SSOResults>() {
@@ -113,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem logToggle = menu.findItem(R.id.menu_toggle_log);
+        MenuItem create_sso_user = menu.findItem(R.id.create_sso_user);
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -121,9 +114,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.menu_toggle_log:
-                ViewAnimator output = (ViewAnimator) findViewById(R.id.sample_output);
-                supportInvalidateOptionsMenu();
+            case R.id.create_sso_user:
+                Communication comm = new Communication();
+                comm.registerUser("jan_novak", "1234");
+
+
                 return true;
         }
         return super.onOptionsItemSelected(item);

@@ -37,10 +37,11 @@ import android.widget.Toast;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cz.xmartcar.communication.bluetooth.BluetoothService2;
+import cz.xmartcar.communication.bluetooth.BluetoothService;
 import cz.xmartcar.communication.bluetooth.Constants;
 
 public class BluetoothFragment extends Fragment {
+
     private static final Logger log = LoggerFactory.getLogger(BluetoothFragment.class);
 
 
@@ -77,7 +78,7 @@ public class BluetoothFragment extends Fragment {
     /**
      * Member object for the chat services
      */
-    private BluetoothService2 mChatService = null;
+    private BluetoothService mChatService = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,8 +99,6 @@ public class BluetoothFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        // If BT is not on, request that it be enabled.
-        // setupChat() will then be called during onActivityResult
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
@@ -126,7 +125,7 @@ public class BluetoothFragment extends Fragment {
         // onResume() will be called when ACTION_REQUEST_ENABLE activity returns.
         if (mChatService != null) {
             // Only if the state is STATE_NONE, do we know that we haven't started already
-            if (mChatService.getState() == BluetoothService2.STATE_NONE) {
+            if (mChatService.getState() == BluetoothService.STATE_NONE) {
                 // Start the Bluetooth chat services
                 mChatService.start();
             }
@@ -173,8 +172,8 @@ public class BluetoothFragment extends Fragment {
             }
         });
 
-        // Initialize the BluetoothService2 to perform bluetooth connections
-        mChatService = new BluetoothService2(getActivity(), mHandler);
+        // Initialize the BluetoothService to perform bluetooth connections
+        mChatService = new BluetoothService(getActivity(), mHandler);
 
         // Initialize the buffer for outgoing messages
         mOutStringBuffer = new StringBuffer("");
@@ -199,14 +198,14 @@ public class BluetoothFragment extends Fragment {
      */
     private void sendMessage(String message) {
         // Check that we're actually connected before trying anything
-        if (mChatService.getState() != BluetoothService2.STATE_CONNECTED) {
+        if (mChatService.getState() != BluetoothService.STATE_CONNECTED) {
             Toast.makeText(getActivity(), "not connected", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Check that there's actually something to send
         if (message.length() > 0) {
-            // Get the message bytes and tell the BluetoothService2 to write
+            // Get the message bytes and tell the BluetoothService to write
             byte[] send = message.getBytes();
             mChatService.write(send);
 
@@ -266,7 +265,7 @@ public class BluetoothFragment extends Fragment {
     }
 
     /**
-     * The Handler that gets information back from the BluetoothService2
+     * The Handler that gets information back from the BluetoothService
      */
     private final Handler mHandler = new Handler() {
         @Override
@@ -275,16 +274,16 @@ public class BluetoothFragment extends Fragment {
             switch (msg.what) {
                 case Constants.MESSAGE_STATE_CHANGE:
                     switch (msg.arg1) {
-                        case BluetoothService2.STATE_CONNECTED:
+                        case BluetoothService.STATE_CONNECTED:
                             String s = "connected to " + mConnectedDeviceName;
                             setStatus(s);
                             mConversationArrayAdapter.clear();
                             break;
-                        case BluetoothService2.STATE_CONNECTING:
+                        case BluetoothService.STATE_CONNECTING:
                             setStatus("connecting");
                             break;
-                        case BluetoothService2.STATE_LISTEN:
-                        case BluetoothService2.STATE_NONE:
+                        case BluetoothService.STATE_LISTEN:
+                        case BluetoothService.STATE_NONE:
                             setStatus("not connected");
                             break;
                     }
